@@ -3,8 +3,22 @@ import joblib
 import pandas as pd
 import plotly.express as px
 from datetime import datetime
+from huggingface_hub import hf_hub_download # الإضافة الجديدة
 
 st.set_page_config(page_title="SafeDrill AI - Pro Edition", layout="wide")
+
+# --- تعديل تحميل الموديل ليعمل من المستودع الرقمي ---
+@st.cache_resource
+def load_drilling_model():
+    # سيقوم الكود الآن بتحميل الموديل من مستودعك مباشرة
+    model_path = hf_hub_download(
+        repo_id="Sulaimankudaimi/DigitalOilfield", 
+        filename="models/pipe_sticking_model.h5" # أو stuck_pipe_model.pkl حسب الاسم الذي رفعته
+    )
+    return joblib.load(model_path)
+
+model = load_drilling_model()
+# ------------------------------------------------
 
 # Sidebar Branding
 with st.sidebar:
